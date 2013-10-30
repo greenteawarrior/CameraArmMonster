@@ -1,43 +1,61 @@
+'''
+TEST FILE:
+Uses haarcascade's XML file to train CascadeClassifier to
+  recognize faces.
+Infinitely runs through video input and detects faces.
+  Boxes the face and displays at relatively live speed.
+
+--Mitchell
+'''
+
 import cv2
 import numpy as np
 
-path = "gentlemenclub.jpg"
+#Imports the training data.
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
-def detect(img1):
-    tmp = cv2.cv.CreateImage(cv2.cv.GetSize(img1),8,3)
-    cv2.cv.CvtColor(img1,tmp,cv2.cv.CV_BGR2RGB)
-    cv2.cv.CvtColor(tmp, tmp,cv2.cv.CV_BGR2RGB)
+def detect(imgin):
+    '''
+    Takes in an image (Webcam image format) and returns the
+    Rectangle X and Y of the image
+    '''
+    tmp = cv2.cv.CreateImage(cv2.cv.GetSize(imgin),8,3) #creates image of the right size
+    cv2.cv.CvtColor(imgin, tmp,cv2.cv.CV_BGR2RGB)
+    cv2.cv.CvtColor(tmp, tmp,cv2.cv.CV_BGR2RGB) #Puts colors into the image
 
-    img = np.asarray(cv2.cv.GetMat(tmp))
+    img = np.asarray(cv2.cv.GetMat(tmp)) #Converts to proper format
 
-    #img = cv2.imread(path)
-    #print img.shape
-
-    print(type(img) == type(img1))
-    rects = cascade.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (20,20))
-
+    #Creates the rectangles that border the faces
+    rects = cascade.detectMultiScale(img, 1.3, 4, 
+            cv2.cv.CV_HAAR_SCALE_IMAGE, (20,20))
+            
     if len(rects) == 0:
         return [], img
     rects[:, 2:] += rects[:, :2]
     return rects, img
 
 def box(rects, img):
-    for x1, y1, x2, y2 in rects:
+    for x1, y1, x2, y2 in rects: #Draws the rectangles detected earlier
         cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
-    cv2.cv.ShowImage("w1", cv2.cv.fromarray(img))
-    #cv2.cv.ShowImage("w1", cv2.cv.QueryFrame(cam))
-    #cv2.imwrite('detected.jpg', img);
-    cv2.cv.WaitKey(0)
+        dx = (x1 + x2) * 0.5 - x_mid
+        dy = (y1 + y2) * 0.5 - y_mid
+        print (dx, dy) #Prints relative position
+    cv2.cv.ShowImage("YOUR FACE", cv2.cv.fromarray(img))
 
 
-cv2.namedWindow("w1", (cv2.CV_WINDOW_AUTOSIZE))
+#Generates Window, all future images displayed appear on this window
+cv2.namedWindow("YOUR FACE", (cv2.CV_WINDOW_AUTOSIZE))
+
+#Creates Camera and establishes the midpoints for calculations
 cam = cv2.cv.CaptureFromCAM(0)
+x_mid = cv2.cv.GetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_WIDTH) // 2
+y_mid = cv2.cv.GetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) // 2
 
 while True:
     pic = cv2.cv.QueryFrame(cam)
-    print type(pic)
     rects, img = detect(pic)
     box(rects, img)
+    cv2.cv.WaitKey(5) #Necessary to have every time you display an image
 
-cv2.cv.destroyWindow("w1")
+#Window Cleanup
+cv2.cv.destroyWindow("YOUR FACE")
