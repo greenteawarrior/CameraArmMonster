@@ -11,6 +11,8 @@ Infinitely runs through video input and detects faces.
 import cv2
 import numpy as np
 
+''' - Jas '''
+
 #Imports the training data.
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
