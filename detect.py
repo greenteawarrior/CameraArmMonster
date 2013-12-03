@@ -18,6 +18,8 @@ import cv2
 import numpy as np
 import serial
 
+''' - Jas '''
+
 #Imports the training data.
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
