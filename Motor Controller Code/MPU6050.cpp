@@ -3153,4 +3153,3 @@ void MPU6050::setDMPConfig2(uint8_t config) {
 
 
 
-
