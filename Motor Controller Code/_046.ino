@@ -1,4 +1,3 @@
-
 /*
 Brushless Gimbal Controller Software by Christian Winkler (C) 2013
 
@@ -626,7 +625,7 @@ void loop()
   gyroPitch = gyroPitch + config.accelWeight * (pitchAngleACC - pitchSetpoint)* fabs(pitchAngleACC - pitchSetpoint) /sampleTimeACC;
       
   // Calculate PIDs
-  pitchPID = ComputePID(sampleTimePID,gyroPitch ,config.pSetpoint-13.0, &pitchErrorSum, &pitchErrorOld,config.gyroPitchKp,config.gyroPitchKi,config.gyroPitchKd,maxDegPerSecondPitch);
+  pitchPID = ComputePID(sampleTimePID,gyroPitch ,config.pSetpoint, &pitchErrorSum, &pitchErrorOld,config.gyroPitchKp,config.gyroPitchKi,config.gyroPitchKd,maxDegPerSecondPitch);
   rollPID = ComputePID(sampleTimePID,gyroRoll ,config.rSetpoint, &rollErrorSum, &rollErrorOld,config.gyroRollKp,config.gyroRollKi,config.gyroRollKd,maxDegPerSecondRoll);
 
   // Calculate Motor Update Rate from PID output
