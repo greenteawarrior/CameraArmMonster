@@ -22,10 +22,9 @@ void setSerialProtocol()
   sCmd.addCommand("TAC", transmitUseACC);
   sCmd.addCommand("OAC", toggleACCOutput);
   sCmd.addCommand("ODM", toggleDMPOutput);
-  
-  sCmd.addCommand("STG", setTarget);
-  
   sCmd.addCommand("HE", helpMe);
+  sCmd.addCommand("STG", setTarget);
+  sCmd.addCommand("SDT", setDelta);
   sCmd.setDefaultHandler(unrecognized);      // Handler for command that isn't matched  (says "What?")
 }
 
@@ -178,11 +177,17 @@ void setMotorDirNo()
   config.motorNumberRoll = atoi(sCmd.next());
 }
 
-//Call by typing in "STG (Pitch Value) (Roll Value);"
+//Call by typing in "STG (Roll Value) (Pitch Value);"
 void setTarget()
 {
-  config.pSetpoint = atof(sCmd.next());
   config.rSetpoint = atof(sCmd.next());
+  config.pSetpoint = atof(sCmd.next());
+}
+
+void setDelta()
+{
+  config.rSetpoint = atof(sCmd.next()) + config.rSetpoint;
+  config.pSetpoint = atof(sCmd.next()) + config.pSetpoint;
 }
 
 void helpMe()
@@ -216,4 +221,3 @@ void unrecognized(const char *command)
 {
   Serial.println(F("What? type in HE for Help ..."));
 }
-
