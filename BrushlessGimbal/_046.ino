@@ -1,4 +1,3 @@
-
 /*
 Brushless Gimbal Controller Software by Christian Winkler (C) 2013
 
@@ -80,27 +79,27 @@ int8_t maxRCPitch;
 int8_t minRCRoll;
 int8_t maxRCRoll;
 int16_t rcGain;
-
-float rSetpoint;
-float pSetpoint;
-
 bool rcAbsolute;
 bool useACC;
 bool accOutput;
 bool dmpOutput;
+
+float rSetpoint;
+float pSetpoint;
+
 } config;
 
 void recalcSinusArrays();
 void setDefaultParameters()
 {
   config.vers = VERSION;
-  config.gyroPitchKp = 15000;
-  config.gyroPitchKi = 50000;
-  config.gyroPitchKd = 50000;
-  config.gyroRollKp = 15000;
-  config.gyroRollKi = 50000;
-  config.gyroRollKd = 50000;
-  config.accelWeight = 97;
+  config.gyroPitchKp = 20000; //tilt //divide 1000 
+  config.gyroPitchKi = 10;
+  config.gyroPitchKd = 60;
+  config.gyroRollKp = 15000; //pan
+  config.gyroRollKi = 10;
+  config.gyroRollKd = 500;
+  config.accelWeight = 75;
   config.nPolesMotorPitch = 14;
   config.nPolesMotorRoll = 14;
   config.dirMotorPitch = -1;
@@ -121,7 +120,6 @@ void setDefaultParameters()
   
   config.pSetpoint = 0.0;
   config.rSetpoint = 0.0;
-  
   recalcMotorStuff();
 }
 
@@ -309,13 +307,12 @@ void initResolutionDevider()
 
 void updateRawGyroData(float* gyroX, float* gyroY)
 {
-
-  int16_t x,y;
-  mpu.getRotationXY(&x,&y);
+  int16_t x,y, z;
+  mpu.getRotation(&x,&y,&z);
   
-  *gyroX = (x-xGyroOffset)/resolutionDevider;//(mpu.getRotationY()- pitchGyroOffset)/resolutionDevider;
+  *gyroX = (z-xGyroOffset)/resolutionDevider;//(mpu.getRotationY()- pitchGyroOffset)/resolutionDevider;
   *gyroY = (y-yGyroOffset)/resolutionDevider;//(mpu.getRotationX() - rollGyroOffset)/resolutionDevider;
-
+  Serial.println(*gyroY); //*gyroX is now pan 
 }
 
 // Interrupt Handler
@@ -331,7 +328,7 @@ void gyroOffsetCalibration()
   xGyroOffset=0; yGyroOffset=0; 
   for(int i=0;i<500;i++)
   {
-    xGyroOffset += mpu.getRotationX();
+    xGyroOffset += mpu.getRotationZ();
     yGyroOffset += mpu.getRotationY();
     delay(10);
   }
@@ -642,5 +639,4 @@ void loop()
   
   //Serial.println((micros()-timer)/CC_FACTOR);
 }
-
 
