@@ -9,7 +9,7 @@ motorMultiplier is how extreme
 int tiltPin = 9;
 int panPin = 10;
 
-double motorMultiplier = 0.02;
+double motorMultiplier = 0.04;
 boolean debugMode = true;
 
 //End options
