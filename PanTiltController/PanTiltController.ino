@@ -1,3 +1,4 @@
+//creating servo object
 #include <Servo.h>
 
 /*SETTINGS
@@ -12,11 +13,12 @@ boolean debugMode = true;
 //End options
 
 String input = ""; //Holds the Serial input
-Servo tilt; //Create tilt servo
+Servo tilt; //Create Tilt servo
 Servo pan; //Create Pan servo
 
-int tiltPos = 90; //Stores Servo Position.  0-180 degrees
-int panPos = 90;
+int tiltPos = 90; //Stores Servo Position.  0-?? degrees
+//is it really 0-180 degrees? consider mechanical limitations of gimbal system
+int panPos = 90; //Stores Pan Position. 0-?? degrees
 
 
 void setup(){
@@ -30,6 +32,8 @@ void setup(){
 void loop(){
   pan.write(panPos);
   delay(15); //Wait for servos to get to position
+  //might want to play with the delay numbers for better performance
+
   tilt.write(tiltPos);
   delay(15); //Wait for servos to get to position
 }
@@ -41,7 +45,7 @@ void loop(){
 //";" can be replaced with any non numeric character
 //ONLY INTEGERS CAN BE USED
 void serialEvent() {
-  boolean firstVal = true; //Uses this to understand whether the value goes into pan or tilt first
+  boolean firstVal = true; //Uses this to understand whether the value goes into pan (true?) or tilt (false?) first
   input = "";
   while(Serial.available()){ //Takes in a string as a form like "100;200;"
     char in = (char)Serial.read();
@@ -61,7 +65,7 @@ void serialEvent() {
       input = "";
     }
 
-    else{ //Sets Pitch when pan is already set
+    else{ //Sets Tilt when pan is already set
       tiltPos += convertToSteps(input.toInt());
       tiltPos = constrain(tiltPos, 0, 180);
       if(debugMode){
@@ -75,7 +79,7 @@ void serialEvent() {
   }
 }
 
-//Returns stepper motor degree conversion.
+//Returns servo degree conversion. 
 //May not be linear because of how pictures work, use this to adjust
 //  How much a single pixel distance is worth in terms of degrees.
 int convertToSteps(int pixelFeedback){ 
@@ -83,12 +87,12 @@ int convertToSteps(int pixelFeedback){
 }
 
 //Checks if a character is an integer, also includes the
-// negative sign for usage.
+// negative sign for usage. (Is it a string of numbers?)
 //Note: Does NOT include decimal points
-boolean isInt(char inChar){
-  boolean isNegative = inChar == 45;
+bool isInt(char inChar){
+  boolean isNegative = inChar == 45; //45 is the hyphen
   boolean isNumber = false;
-  if(inChar > 47 && inChar < 58){
+  if(inChar > 47 && inChar < 58){ //0 to 9 in ascii
     isNumber = true;
   }
   return isNegative || isNumber;
