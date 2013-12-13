@@ -1,3 +1,4 @@
+
 //creating servo object
 #include <Servo.h>
 
@@ -7,7 +8,8 @@ motorMultiplier is how extreme
 */
 int tiltPin = 9;
 int panPin = 10;
-double motorMultiplier = 0.3;
+
+double motorMultiplier = 0.02;
 boolean debugMode = true;
 
 //End options
@@ -31,11 +33,12 @@ void setup(){
 
 void loop(){
   pan.write(panPos);
-  delay(15); //Wait for servos to get to position
+  delay(30); //Wait for servos to get to position
   //might want to play with the delay numbers for better performance
 
   tilt.write(tiltPos);
-  delay(15); //Wait for servos to get to position
+  //<
+  delay(30); //Wait for servos to get to position
 }
 
 //In between loop calls, Serial Event checks the serial port and
@@ -52,11 +55,12 @@ void serialEvent() {
     if(isInt(in)){ //If the character is part of a number (Not a space), then
       input += in;
     }
+    
 
     else if(firstVal){ //Sets Pan when not a number
       firstVal = false;
       panPos += convertToSteps(input.toInt());
-      panPos = constrain(panPos, 0, 180);
+      panPos = constrain(panPos, 45, 135);
       if(debugMode){        
         Serial.println(input);
         Serial.print("Pan: ");
@@ -67,7 +71,7 @@ void serialEvent() {
 
     else{ //Sets Tilt when pan is already set
       tiltPos += convertToSteps(input.toInt());
-      tiltPos = constrain(tiltPos, 0, 180);
+      tiltPos = constrain(tiltPos, 45, 135);
       if(debugMode){
         Serial.println(input);
         Serial.print("Tilt: ");

@@ -88,10 +88,12 @@ void serialEvent() {
 //May not be linear because of how pictures work, use this to adjust
 //  How much a single pixel distance is worth in terms of degrees.
 int convertToSteps(int pixelFeedback){ 
-  if(stepConversionType == "Linear")
+  if(stepConversionType == "Linear"){
     return (int)(pixelFeedback * motorMultiplier);
-  if(stepConversionType == "SquareRoot")
-    return (int)(motorMultiplier * pow(pixelFeedback, 0.5);
+  }
+  if(stepConversionType == "SquareRoot"){
+    return (int)(motorMultiplier * pow(pixelFeedback, 0.5));
+  }
   return (int)(motorMultiplier * pow(pixelFeedback, power));
 }
 

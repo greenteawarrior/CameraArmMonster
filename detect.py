@@ -23,8 +23,8 @@ import serial
 #Imports the training data.
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
-serial_on = False
-serial_name = "/dev/SOMENAME"
+serial_on = True
+serial_name = "/dev/ttyACM0"
 
 def detect(imgin):
     '''
@@ -82,7 +82,7 @@ def box(rects, img):
 cv2.namedWindow("YOUR FACE", (cv2.CV_WINDOW_AUTOSIZE))
 
 #Creates Camera and establishes the midpoints for calculations
-cam = cv2.cv.CaptureFromCAM(0)
+cam = cv2.cv.CaptureFromCAM(1)
 x_mid = cv2.cv.GetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_WIDTH) // 2
 y_mid = cv2.cv.GetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) // 2
 
@@ -90,7 +90,7 @@ last_dx = 0
 last_dy = 0
 
 if(serial_on):
-    ser = serial.Serial(serial_name, 9600)
+    ser = serial.Serial("/dev/ttyACM0", 9600)
 
 while True:
     pic = cv2.cv.QueryFrame(cam)
