@@ -6,7 +6,7 @@ motorMultiplier is how extreme
 */
 int tiltPin = 9;
 int panPin = 10;
-double motorMultiplier = 0.3;
+double motorMultiplier = 0.1;
 float power = 1;
 boolean debugMode = true;
 
@@ -17,6 +17,7 @@ CustomPow: Degree = m * PixelDistance^(C)
 */
 String stepConversionType = "Linear";
 //End options
+
 
 String input = ""; //Holds the Serial input
 Servo tilt; //Create tilt servo
@@ -39,7 +40,7 @@ void setup(){
 void loop(){
   pan.write(panPos);
   delay(15); //Wait for servos to get to position
-  tilt.write(tiltPos);
+  tilt.write(-tiltPos); //I made this change (Jasper)
   delay(15); //Wait for servos to get to position
 }
 

@@ -7,12 +7,10 @@ tilt and pan pins based on arduino setup
 motorMultiplier is how extreme
 */
 int tiltPin = 9;
-
 int panPin = 10;
 
-double motorMultiplier = 1
+double motorMultiplier = 0.04;
 
-;
 boolean debugMode = true;
 
 
