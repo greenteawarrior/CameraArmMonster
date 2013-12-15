@@ -7,10 +7,15 @@ tilt and pan pins based on arduino setup
 motorMultiplier is how extreme
 */
 int tiltPin = 9;
+
 int panPin = 10;
 
-double motorMultiplier = 0.02;
+double motorMultiplier = 1
+
+;
 boolean debugMode = true;
+
+
 
 //End options
 
@@ -96,8 +101,10 @@ int convertToSteps(int pixelFeedback){
 bool isInt(char inChar){
   boolean isNegative = inChar == 45; //45 is the hyphen
   boolean isNumber = false;
-  if(inChar > 47 && inChar < 58){ //0 to 9 in ascii
+  if(inChar >= 48 && inChar <= 57
+  ){ //0 to 9 in ascii
     isNumber = true;
   }
   return isNegative || isNumber;
 }
+
