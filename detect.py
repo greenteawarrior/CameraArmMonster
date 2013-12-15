@@ -24,7 +24,7 @@ import serial
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
 serial_on = True
-serial_name = "/dev/ttyACM1"
+serial_name = "/dev/ttyACM0"
 
 def detect(imgin):
     '''
@@ -83,6 +83,9 @@ cv2.namedWindow("YOUR FACE", (cv2.CV_WINDOW_AUTOSIZE))
 
 #Creates Camera and establishes the midpoints for calculations
 cam = cv2.cv.CaptureFromCAM(1)
+cv2.cv.SetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 240)
+cv2.cv.SetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 180)
+#cam.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
 x_mid = cv2.cv.GetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_WIDTH) // 2
 y_mid = cv2.cv.GetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_HEIGHT) // 2
 
