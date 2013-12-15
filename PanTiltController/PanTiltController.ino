@@ -1,4 +1,3 @@
-
 //creating servo object
 #include <Servo.h>
 
@@ -17,7 +16,7 @@ boolean debugMode = true;
 
 //End options
 
-String input = ""; //Holds the Serial input
+String input = ""; //Holds the Serial i
 Servo tilt; //Create Tilt servo
 Servo pan; //Create Pan servo
 
@@ -36,12 +35,12 @@ void setup(){
 
 void loop(){
   pan.write(panPos);
-  delay(30); //Wait for servos to get to position
+  delay(60); //Wait for servos to get to position
   //might want to play with the delay numbers for better performance
 
-  tilt.write(tiltPos);
-  //<
-  delay(30); //Wait for servos to get to position
+
+  tilt.write(tiltPos); //<
+  delay(60); //Wait for servos to get to position
 }
 
 //In between loop calls, Serial Event checks the serial port and
@@ -59,15 +58,16 @@ void serialEvent() {
       input += in;
     }
     
+    
 
     else if(firstVal){ //Sets Pan when not a number
       firstVal = false;
       panPos += convertToSteps(input.toInt());
       panPos = constrain(panPos, 45, 135);
       if(debugMode){        
-        Serial.println(input);
+       // Serial.println(input);
         Serial.print("Pan: ");
-        Serial.println(panPos);
+        Serial.print(panPos);
       }
       input = "";
     }
@@ -76,8 +76,8 @@ void serialEvent() {
       tiltPos += convertToSteps(input.toInt());
       tiltPos = constrain(tiltPos, 45, 135);
       if(debugMode){
-        Serial.println(input);
-        Serial.print("Tilt: ");
+        //Serial.println(input);
+        Serial.print(" Tilt: ");
         Serial.println(tiltPos);
       }
       input = "";
@@ -90,7 +90,26 @@ void serialEvent() {
 //May not be linear because of how pictures work, use this to adjust
 //  How much a single pixel distance is worth in terms of degrees.
 int convertToSteps(int pixelFeedback){ 
-  return (int)(pixelFeedback * motorMultiplier);
+  if(pixelFeedback < 15 && pixelFeedback > -15){
+    return 0;
+  }
+  if(pixelFeedback >= 15){
+    return 1;
+  }
+    return -1;
+/*
+  boolean flag = pixelFeedback < 0;
+  
+  if(flag){
+    pixelFeedback = -1 * pixelFeedback;
+  }
+  //int outvalue = (int)(pow(pixelFeedback/ 50.0, 0.5) * 4);
+  int outvalue = (int)(.001 * pow(pixelFeedback,3) + .3*pixelFeedback)
+  if(flag){
+    outvalue = -1 * outvalue;
+  }
+  return outvalue;*/
+  //return (int)(pixelFeedback * motorMultiplier);
 }
 
 //Checks if a character is an integer, also includes the
@@ -105,4 +124,5 @@ bool isInt(char inChar){
   }
   return isNegative || isNumber;
 }
+
 

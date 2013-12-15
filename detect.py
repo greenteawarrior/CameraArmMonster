@@ -17,6 +17,9 @@ In progress: Arduino Motor Control
 import cv2
 import numpy as np
 import serial
+import time
+
+TIME_BEGIN = time.time()
 
 ''' - Jas '''
 
@@ -25,6 +28,23 @@ cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
 serial_on = True
 serial_name = "/dev/ttyACM0"
+
+def tick():
+    global TIME_BEGIN
+    TIME_BEGIN = time.time()
+
+def tock(silent=False):
+    global TIME_BEGIN
+    if(silent):
+        return time.time() - TIME_BEGIN
+    delta = time.time() - TIME_BEGIN
+    print delta
+    return delta
+
+def ticktock(fun):
+    tick()
+    fun
+    tock()
 
 def detect(imgin):
     '''
@@ -74,6 +94,7 @@ def box(rects, img):
         if serial_on:
             ser.write(str(int(dx)) + ";" + str(int(dy)) + ";")
         print("dx: " + str(int(dx)) + " dy: " + str(int(dy)) + " written to serial port")
+        time.sleep(0.1)
     #print (dx, dy) #Prints relative position
     cv2.cv.ShowImage("YOUR FACE", cv2.cv.fromarray(img))
 
