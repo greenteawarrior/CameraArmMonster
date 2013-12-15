@@ -26,7 +26,7 @@ TIME_BEGIN = time.time()
 #Imports the training data.
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
 
-serial_on = True
+serial_on = False
 serial_name = "/dev/ttyACM0"
 
 def tick():
@@ -103,7 +103,7 @@ def box(rects, img):
 cv2.namedWindow("YOUR FACE", (cv2.CV_WINDOW_AUTOSIZE))
 
 #Creates Camera and establishes the midpoints for calculations
-cam = cv2.cv.CaptureFromCAM(1)
+cam = cv2.cv.CaptureFromCAM(0)
 cv2.cv.SetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 240)
 cv2.cv.SetCaptureProperty(cam, cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 180)
 #cam.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
